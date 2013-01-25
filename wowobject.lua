@@ -1,4 +1,6 @@
-WoWObject = {}
+WoWObject = {
+				Address = GetPlayer();
+			}
 
 function WoWObject:new (obj)
 	obj = obj or {} -- create object if user does not provide one
@@ -8,5 +10,5 @@ function WoWObject:new (obj)
 end
 
 function WoWObject:ToString()
-	_Log("WoWObject");
+	return "WoWObject";
 end

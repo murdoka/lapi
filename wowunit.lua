@@ -8,5 +8,5 @@ function WoWUnit:new (obj)
 end
 
 function WoWUnit:ToString()
-	_Log("WoWUnit");
+	return "WoWUnit";
 end
