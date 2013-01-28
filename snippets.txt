@@ -1,0 +1,3 @@
+snippets
+
+/run ChatFrame1:AddMessage(string.match(GetQuestLink(2), "Hquest:(%d+)")) -- Extract QUestID

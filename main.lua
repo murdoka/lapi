@@ -1,12 +1,36 @@
 -- Loading Classes
+WoWDebug = 4;--0 nichts / 1 info / 2 warning / 3 Error / 4 debug
 dofile("wowobject.lua");
 dofile("wowunit.lua");
+dofile("wowquest.lua");
 
+
+function WoWLog(Message, loglevel)
+	if loglevel == WoWDebug then _Log(Message) end
+end
 
 function WoWFoo()
+	--_Log("QuestCount: "..WoWQuest.Count())
+	--_Log("GetIndexByQuestID: "..WoWQuest.GetIndexByQuestID(31821))
+	
+	quest = WoWQuest:new({_ID = 31109})--culling the swarm
+	quest:Foo()
+	--quest:Track()
+	--if quest:IsTracked() then _Log("True") else _Log("False") end
+	--quest:DoNotTrack()
+		
+	--quest:Abandon();
+	--quest = WoWQuest:new({_ID = 31481})
+	--quest = WoWQuest:new({_ID = 31821})
+	
+	_Log(quest.Title)
+	
+	
+	--[[
 	me = WoWObject:new({Address=750517304})
 	_Log(me.ToString())
 	_Log(me.Address)
+	]]--
 	--[[
 	me2 = WoWUnit:new()
 	_Log(me2.ToString())
