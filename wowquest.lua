@@ -63,7 +63,6 @@ end
 function WoWQuest:Init()
     WoWLog(">WoWQuest:Init("..self:ID()..")",4);
 	self:Index(self:__GetIndex())
-    WoWQuest.SetActive(self:Index());
     WowLuaDoString("title, level, questTag, suggestedGroup, isHeader, isCollapsed, isComplete, isDaily, questID, startEvent, displayQuestID = GetQuestLogTitle("..self:Index()..")")
 	
 	self.Title      = tostring(WowGetLuaValue("title"));
@@ -74,38 +73,6 @@ function WoWQuest:Init()
 	self.StartEvent = tonumber(WowGetLuaValue("startEvent")) or 0;
 end
 
-function WoWQuest:Foo()
-	_Log("Foo - Start")
-	WowLuaDoString([[
-					function GOSSIP_SHOW()
-						DEFAULT_CHAT_FRAME:AddMessage("-=TEST=- (GOSSPI)")
-					end
-					function QUEST_DETAIL()
-						DEFAULT_CHAT_FRAME:AddMessage("-=TEST=- (DETAIL)")
-					end
-					function QUEST_PROGRESS()
-						DEFAULT_CHAT_FRAME:AddMessage("-=TEST=- (PROGRESS)")
-					end
-					function QUEST_COMPLETE()
-						DEFAULT_CHAT_FRAME:AddMessage("-=TEST=- (COMPLETE)")
-					end
-	
-					questFrame = CreateFrame("Frame", "SOCD_EVENT_FRAME", UIParent);
-					questFrame:SetScript("OnEvent", function(self,event) 
-														DEFAULT_CHAT_FRAME:AddMessage("-=TEST=-"..event)
-														event()
-													end
-										);
-					
-					questFrame:RegisterEvent("GOSSIP_SHOW")
-					questFrame:RegisterEvent("QUEST_DETAIL")
-					questFrame:RegisterEvent("QUEST_PROGRESS")
-					questFrame:RegisterEvent("QUEST_COMPLETE")
-					
-					]])
-	_Log(tostring(WowGetLuaValue("questFrame")))
-	_Log("Foo - End")
-end
 
 function WoWQuest:Abandon()
 	self:__Test()

@@ -2,6 +2,7 @@
 WoWDebug = 4;--0 nichts / 1 info / 2 warning / 3 Error / 4 debug
 dofile("wowobject.lua");
 dofile("wowunit.lua");
+dofile("wowquestManager.lua");
 dofile("wowquest.lua");
 
 
@@ -10,11 +11,18 @@ function WoWLog(Message, loglevel)
 end
 
 function WoWFoo()
+
+	questManager = WoWQuestManager:new();
+	
+	
+	--_Log(questManager:ToString())
+
+
 	--_Log("QuestCount: "..WoWQuest.Count())
 	--_Log("GetIndexByQuestID: "..WoWQuest.GetIndexByQuestID(31821))
 	
-	quest = WoWQuest:new({_ID = 31109})--culling the swarm
-	quest:Foo()
+	--quest = WoWQuest:new({_ID = 31109})--culling the swarm
+	--quest:Foo()
 	--quest:Track()
 	--if quest:IsTracked() then _Log("True") else _Log("False") end
 	--quest:DoNotTrack()
@@ -23,7 +31,7 @@ function WoWFoo()
 	--quest = WoWQuest:new({_ID = 31481})
 	--quest = WoWQuest:new({_ID = 31821})
 	
-	_Log(quest.Title)
+	--_Log(quest.Title)
 	
 	
 	--[[
@@ -52,20 +60,10 @@ end
 
 --[[
 dofile("unit.lua");
-
-
-
-
-
-
-
 dofile("player");
 dofile("target");
 dofile("groupMember");
-
 dofile("item");
-
-
 dofile("quest");
 dofile("faction");
 dofile("group");
