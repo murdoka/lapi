@@ -1,0 +1,126 @@
+function FooBar()
+	local func = [[
+						if eventArgs then
+							local message,author,language,channelName,target,chatFlag,zoneID,channelNumber,rawChannelName,lineID,senderGUID=eventArgs
+							CxDEBUG("Chatmessage: "..message)
+						end
+				]]
+	AddAsyncEventAction("CHAT_MSG_CHANNEL",func)
+end
+
+function AddAsyncEventAction(event,func)
+	if not event then _Log("AddAsyncEventAction missing 'event'") return end
+	if not func  then _Log("AddAsyncEventAction missing 'func'")  return end
+	WowLuaDoString('EventManager.AddAsyncEventAction("'..event..'",[['..func..']])')
+end
+
+function Init()
+	_Log("\n\nWaiting for Eventmanager.Init() ...\n")
+	WowLuaDoString([[
+							EventManager_InitDone = 0
+							
+							function CxDEBUG(message)
+								DEFAULT_CHAT_FRAME:AddMessage("EventManager>> : "..message)
+							end	
+	
+							CxDEBUG("")
+							CxDEBUG("")
+							CxDEBUG("<< EventManager V.0.1>>")
+							CxDEBUG("=======================")
+		
+							-- Avoid double fireing
+							if EventManager ~= nil then
+								if EventManager.frame ~= nil then
+									CxDEBUG("Unregister All Events")
+									EventManager.frame:UnregisterAllEvents()
+								end
+							end
+							
+							CxDEBUG("Init EventManager")
+							EventManager = nil -- Renew init frame
+							EventManager = {}
+							EventManager.InitDone = 0
+							EventManager.EventMethods = {}
+							
+							function EventManager.AddAsyncEventAction(event,func)
+								if not event then return end
+								if not func  then return end
+								CxDEBUG("Register callback for: "..event.." ... ")
+								if not EventManager.EventMethods[event] then EventManager.EventMethods[event] = {} end
+								local compiledFunc = EventManager.__CompileMethod(func)
+								if not compiledFunc then return end
+								table.insert(EventManager.EventMethods[event],compiledFunc)
+								CxDEBUG("Register callback for: "..event.." Complete! ")
+							end
+							
+							function EventManager.__CompileMethod(func)
+								CxDEBUG("      +---->Compile ... ")
+								local f,error = loadstring(func,"Eventmanager LoadString")
+								if not f then
+									CxDEBUG("      +---->Compile FAILED!")
+									CxDEBUG("Error: "..error)
+									return nil
+								end
+								CxDEBUG("      +---->Compile complete ")
+								return f
+							end
+							
+							function EventManager.__CallBack(event,...)
+								if not EventManager.EventMethods[event] then return end -- if no Callbacks a registered exit
+								local e = EventManager.EventMethods[event]
+								for i,f in ipairs(e) do 
+									local newenv = {} 						-- new environment
+									setmetatable(newenv, {__index = _G})	-- copy current Environment
+									newenv.eventArgs = ...					-- expose arguments
+									setfenv(f, newenv)
+									f() -- execution
+								end
+							end
+
+							
+							-- Create Frame
+							EventManager.frame, EventManager.events = CreateFrame("Frame","EventManager",UIParent), {};
+								-- E V E N T   H A N D L E R S --
+							-- ===================================================================================================
+							-- Example: function EventManager.events:EVENTNAME(...)
+							-- varargs: local arg1, arg2, arg3 = ...
+							-- ===================================================================================================
+							
+							function EventManager.events:CHAT_MSG_CHANNEL(...)
+								EventManager.__CallBack("CHAT_MSG_CHANNEL",...)
+							end
+							
+							-- ===================================================================================================
+							
+							-- Manage EventHandler
+							EventManager.frame:SetScript("OnEvent", 	function(self, event, ...)
+																			CxDEBUG("Incoming Event: "..event)
+																			EventManager.events[event](self, ...); 
+																		end);
+							for k, v in pairs(EventManager.events) do
+								CxDEBUG("Register Event: "..k)
+								EventManager.frame:RegisterEvent(k);
+							end							
+						
+							CxDEBUG("EventManager running...")
+							EventManager_InitDone = 1
+					]])
+	for i=1,5 do
+		Sleep(1000)
+		result = tonumber(WowGetLuaValue("EventManager_InitDone")) or 0
+		if result == 1 then break end
+		_Log("Waiting for Init() ... Try: "..i)
+	end
+
+	if result == 1 then 
+		_Log("EventManager running...")
+		return true
+	else
+		_Log("EventManager could not loaded.")
+		return false
+	end
+end
+
+if Init() then
+	FooBar()
+end

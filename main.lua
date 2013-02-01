@@ -1,9 +1,10 @@
 -- Loading Classes
 WoWDebug = 4;--0 nichts / 1 info / 2 warning / 3 Error / 4 debug
+dofile("wowipc.lua");
 dofile("wowobject.lua");
 dofile("wowunit.lua");
-dofile("wowquestManager.lua");
-dofile("wowquest.lua");
+
+
 
 
 function WoWLog(Message, loglevel)

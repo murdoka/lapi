@@ -1,7 +1,3 @@
-function MyEvent()
-	_Log("sdfsfsfd")
-end
-
 WoWQuestManager = {}
 
 --[[ 'STATICS' ]]--
@@ -23,8 +19,6 @@ end
 
 function WoWQuestManager:Init()
 	WoWLog(">WoWQuestManager:Init()",4);
-	_Log(string.sub(tostring(MyEvent),10,18))
-	WowLuaDoString("abcdefghi = '"..string.sub(tostring(MyEvent),11,18).."'");
 	WowLuaDoString([[
 						DEFAULT_CHAT_FRAME:AddMessage("")
 						DEFAULT_CHAT_FRAME:AddMessage("")
@@ -35,10 +29,6 @@ function WoWQuestManager:Init()
 							DEFAULT_CHAT_FRAME:AddMessage("CxEventFrame>> : "..message)
 						end
 						
-						abcdefghi = "0x"..abcdefghi
-						abcdefghi = tonumber(abcdefghi)
-						CxDEBUG(abcdefghi)
-						call_func_ptr(abcdefghi)
 						
 						if CxQuestManager ~= nil then
 							if CxQuestManager.eventFrame ~= nil then
@@ -48,7 +38,7 @@ function WoWQuestManager:Init()
 						end
 						
 						
-						CxQuestManager = nil -- zu debug zwecken
+						CxQuestManager = nil -- for debug purpose
 						
 						
 						if CxQuestManager ~= nil then
