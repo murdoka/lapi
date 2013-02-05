@@ -62,9 +62,6 @@ function WoWQuestManager:Init()
 								--end
 								
 								--call_func_ptr()
-								
-								
-								
 							end
 							function CxQuestManager:QUEST_DETAIL()
 								DEFAULT_CHAT_FRAME:AddMessage("-=TEST=- (QUEST_DETAIL)")
